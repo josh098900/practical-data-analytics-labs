@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.csv
+ai_article_clean.txt
+*grams.txt
+.DS_Store
