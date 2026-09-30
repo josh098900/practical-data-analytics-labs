@@ -1,7 +1,8 @@
 import pandas as pd
 
 # load csv
-file_path = 'week02/dataset/FakeNewsNet.csv'  # change to your csv path
+file_path = 'week02/dataset/FakeNewsNet.csv' 
+ # change to your csv path
 df = pd.read_csv(file_path)
 
 # total rows
