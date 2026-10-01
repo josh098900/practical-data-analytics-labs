@@ -18,6 +18,11 @@ from nltk.corpus import stopwords
 from nltk.util import ngrams
 
 from Cleaning_HTML import fetch_html, extract_clean_text
+from nltk.stem import WordNetLemmatizer
+
+nltk.download("wordnet", quiet=True)
+LEMMATIZER = WordNetLemmatizer() #seeing the difference with lemmatizer added, converts inflicted words into their valid root
+#its results are not perfect, but works, eg united states becoming united state, because .lower() was used, and it doesnt know that united states is a proper noun, so when lemmatizing, it just sees united states
 
 PAGES = {
     "algorithm": "https://en.wikipedia.org/wiki/Algorithm",
@@ -31,7 +36,8 @@ PAGES = {
     "software_engineering": "https://en.wikipedia.org/wiki/Software_engineering",
 }
 
-OUT_DIR = Path("slide26_output")
+#OUT_DIR = Path("slide26_output")
+OUT_DIR = Path("slide26_output_lemma")
 OUT_DIR.mkdir(exist_ok=True)
 
 nltk.download("stopwords", quiet=True)
@@ -44,6 +50,7 @@ def get_bigrams(text):
     tokens = [t for t in tokens if t not in STOP]
     # TODO 2: remove single-character tokens
     tokens = [t for t in tokens if len(t) > 1]
+    tokens = [LEMMATIZER.lemmatize(t) for t in tokens]
     # TODO 3: return a Counter of bigrams
     return Counter(ngrams(tokens, 2))
 
