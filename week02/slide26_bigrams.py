@@ -4,8 +4,11 @@
 #one bigram file per page, sorted by count
 #one chart per page, saved as an image
 
+#i decided not to use stemming to make it more readable but a trade off was data tyoe and data types being counted seperately, 
+
 #up2255832 feel free to use my work to understand how to do this, just dont copy and paste lol 
 import re
+import matplotlib.pyplot as plt
 import time
 from collections import Counter
 from pathlib import Path
@@ -53,7 +56,19 @@ def save_bigrams(name, bigrams):
         for pair, count in bigrams.most_common():
             f.write(f"{' '.join(pair)}\t{count}\n")
 
+def plot_bigrams(name, bigrams, top_n=20):
+    top = bigrams.most_common(top_n)
+    labels = [" ".join(pair) for pair, count in top]
+    counts = [count for pair, count in top]
 
+    plt.figure(figsize=(8, 6))
+    plt.barh(labels, counts)
+    plt.gca().invert_yaxis()
+    plt.title(f"Top {top_n} bigrams: {name.replace("_", ' ')}")
+    plt.xlabel("Count")
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / f"{name}_bigrams.png")
+    plt.close()
 
 def main():
     for name, url in PAGES.items():
@@ -61,6 +76,7 @@ def main():
         html = fetch_html(url)
         text = extract_clean_text(html)
         bigrams = get_bigrams(text)
+        plot_bigrams(name, bigrams)
         save_bigrams(name, bigrams)
         time.sleep(1)
 
