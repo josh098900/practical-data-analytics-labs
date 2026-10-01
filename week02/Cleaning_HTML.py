@@ -29,16 +29,17 @@ def extract_clean_text(html_source: str) -> str:
     soup = BeautifulSoup(html_source, "html.parser")
 
     # remove unwanted sections
-    for tag in soup([
-        "script", "style", "noscript", "table", "sup", "span",
-        "figure", "img", "nav", "header", "footer"
-    ]):
+    for tag in soup.select(
+        "script, style, noscript, table, sup, figure, img, nav, header, footer, "
+        "ol.references, div.reflist, div.refbegin"
+    ):
         tag.decompose()
-        #decompose() deletes each of those elements completely, along with everything inside them, 
-        #script and style hold code and css which arennt text
+        # decompose() deletes each of those elements completely, along with everything inside them,
+        # script and style hold code and css which aren't text
         # table holds infoboxes and data tables
-        #sup holds the little citation markers like [12]
-        #nav, header, footer hold menus and site chrome. 
+        # sup holds the little citation markers like [12]
+        # nav, header, footer hold menus and site chrome.
+
     # get main content
     main = soup.find("div", id="mw-content-text") # this narrows search to the div where wiki puts the article body
     #skipping the sidebar
