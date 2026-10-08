@@ -40,6 +40,9 @@ PAGES = {
 OUT_DIR = Path("slide26_output_lemma")
 OUT_DIR.mkdir(exist_ok=True)
 
+CLEAN_DIR = Path("clean_texts")
+CLEAN_DIR.mkdir(exist_ok=True)
+
 nltk.download("stopwords", quiet=True)
 STOP = set(stopwords.words("english"))
 
@@ -82,6 +85,7 @@ def main():
         print(f"Processing {name}...")
         html = fetch_html(url)
         text = extract_clean_text(html)
+        (CLEAN_DIR / f"{name}.txt").write_text(text, encoding="utf-8")
         bigrams = get_bigrams(text)
         plot_bigrams(name, bigrams)
         save_bigrams(name, bigrams)
